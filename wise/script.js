@@ -17,51 +17,54 @@ function getHeaders() {
 // 1. Fetch and Display Courses
 async function loadCourses() {
     const grid = document.getElementById('course-grid');
+    grid.innerHTML = "🕵️ Detective Mode: Searching for your API...";
     
-    try {
-        // Example Endpoint: /course/list (Check Wise Docs for exact path)
-        const response = await fetch(`${API_CONFIG.baseUrl}/course/list`, {
-            method: "GET",
-            headers: getHeaders()
-        });
+    // We will test these 3 potential URL patterns
+    const testUrls = [
+        "https://api.wise.live/v1/course/list",           // Standard API
+        "https://altman.wise.live/api/v1/course/list",    // Subdomain API
+        "https://api.wise.live/v1/user/profile"           // Profile check (usually works)
+    ];
 
-        // OLD CODE (Delete this)
-// const data = await response.json();
-
-// NEW DEBUG CODE (Add this)
-const text = await response.text(); 
-console.log("SERVER RESPONSE:", text); // Check Eruda console for this!
-
-try {
-    const data = JSON.parse(text); // Try to parse it manually
-    // ... rest of your code ...
-} catch (e) {
-    console.error("This is not JSON! It is:", text.substring(0, 100)); // Show first 100 chars
-}
-
-        if (data && data.courses) {
-            grid.innerHTML = ""; // Clear loader
-            data.courses.forEach(course => {
-                grid.innerHTML += `
-                    <div class="course-card">
-                        <img src="${course.thumbnail || 'https://via.placeholder.com/300'}" class="course-img" alt="Course">
-                        <div class="card-body">
-                            <h3>${course.name}</h3>
-                            <p>${course.description || "No description available."}</p>
-                            <button class="enroll-btn" onclick="enrollUser('${course.id}')">Enroll Now</button>
-                        </div>
-                    </div>
-                `;
+    // ⚠️ MUST use Proxy for Mobile to avoid "Network Error"
+    const proxy = "https://corsproxy.io/?"; 
+    
+    for (let url of testUrls) {
+        console.log(`Testing: ${url}`);
+        try {
+            const response = await fetch(proxy + url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": "b0e61c43dab6a18c12e0cbc6b4914cf9", // Your Key
+                    "x-wise-namespace": "altman"
+                }
             });
-        } else {
-            grid.innerHTML = "<p>No courses found or API error.</p>";
-        }
-    } catch (error) {
-        console.error("Error fetching courses:", error);
-        grid.innerHTML = "<p>Failed to load courses. Check console for CORS/API errors.</p>";
-    }
-}
 
+            const text = await response.text();
+            
+            // If we get valid JSON, we found the right door!
+            try {
+                const data = JSON.parse(text);
+                console.log(`✅ SUCCESS at ${url}`, data);
+                grid.innerHTML = `<h3 style="color:green">Found it!</h3><p>Working URL: ${url}</p>`;
+                
+                // If this was the profile endpoint, we connected, but need to find the course endpoint now
+                if(url.includes("profile")) {
+                    alert("Connection Successful! But 'Course List' path is still wrong. Check Wise Postman docs.");
+                }
+                return; // Stop testing, we found it
+            } catch (e) {
+                console.log(`❌ Failed at ${url}: Returned HTML (Page Not Found)`);
+            }
+
+        } catch (err) {
+            console.log(`❌ Network/CORS Error at ${url}`);
+        }
+    }
+
+    grid.innerHTML = `<h3 style="color:red">All tests failed.</h3><p>Check Console for details.</p>`;
+}
 // 2. Register User (Student)
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
