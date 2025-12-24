@@ -25,7 +25,19 @@ async function loadCourses() {
             headers: getHeaders()
         });
 
-        const data = await response.json();
+        // OLD CODE (Delete this)
+// const data = await response.json();
+
+// NEW DEBUG CODE (Add this)
+const text = await response.text(); 
+console.log("SERVER RESPONSE:", text); // Check Eruda console for this!
+
+try {
+    const data = JSON.parse(text); // Try to parse it manually
+    // ... rest of your code ...
+} catch (e) {
+    console.error("This is not JSON! It is:", text.substring(0, 100)); // Show first 100 chars
+}
 
         if (data && data.courses) {
             grid.innerHTML = ""; // Clear loader
