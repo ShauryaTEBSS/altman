@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wise LMS Integration</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">My<span class="highlight">Academy</span></div>
+        <div class="nav-links">
+            <a href="#courses">Courses</a>
+            <button id="loginBtn" onclick="toggleModal('loginModal')">Student Register</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Learning Made Simple with Wise</h1>
+        <p>Join live classes and manage your learning journey.</p>
+        <a href="#courses" class="cta-btn">View Courses</a>
+    </header>
+
+    <section id="courses" class="container">
+        <h2>Available Courses</h2>
+        <div id="course-grid" class="grid-loader">
+            <p>Loading courses from Wise...</p>
+        </div>
+    </section>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleModal('loginModal')">&times;</span>
+            <h2>New Student Registration</h2>
+            <form id="registerForm">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="tel" id="phone" placeholder="Phone Number (10 digits)" required>
+                <button type="submit" class="submit-btn">Register on Wise</button>
+            </form>
+            <div id="reg-status"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
