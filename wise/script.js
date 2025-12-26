@@ -1,94 +1,94 @@
 // ==========================================
-//  WISE API INTEGRATION (Mobile/GitHub Pages)
+//  WISE API INTEGRATION (Auto-Scanner)
 // ==========================================
 
 const API_CONFIG = {
-    // 1. The Proxy (Keep this for mobile)
-    proxy: "https://cors-anywhere.herokuapp.com/",
-
-    // 2. The Correct API Base URL
-    baseUrl: "https://api.wiseapp.live/v1",
-
-    // 3. Your Credentials
+    proxy: "https://cors-anywhere.herokuapp.com/", // Must be active
+    baseUrl: "https://api.wiseapp.live/v1",       // The Central API URL
     apiKey: "b0e61c43dab6a18c12e0cbc6b4914cf9",
     namespace: "altman",
-    
-    // ⚠️ IMPORTANT: You must paste your User ID here! ⚠️
-    // Find this in Wise Dashboard > Settings > Developer
-    userId: "694a448028118f629ea81724" 
+    userId: "694a448028118f629ea81724" // <--- ⚠️ PASTE YOUR ADMIN USER ID HERE ⚠️
 };
 
-// Helper: Generate Basic Auth Headers
+// Generate Auth Headers
 function getHeaders() {
-    // Basic Auth = Base64(userId:apiKey)
+    if (API_CONFIG.userId.includes("PASTE")) {
+        alert("⚠️ Please paste your User ID in script.js line 12!");
+        throw new Error("Missing User ID");
+    }
     const authString = btoa(`${API_CONFIG.userId}:${API_CONFIG.apiKey}`);
-    
     return {
         "Content-Type": "application/json",
-        "Authorization": `Basic ${authString}`, // The missing key!
+        "Authorization": `Basic ${authString}`,
         "x-wise-namespace": API_CONFIG.namespace,
         "User-Agent": `VendorIntegrations/${API_CONFIG.namespace}`
     };
 }
 
-// ==========================================
-//  FEATURE: LOAD COURSES
-// ==========================================
 async function loadCourses() {
     const grid = document.getElementById('course-grid');
-    grid.innerHTML = '<p>🔄 Authenticating...</p>';
+    grid.innerHTML = '<p>🕵️ Scanning for correct API path...</p>';
 
-    if (API_CONFIG.userId === "PASTE_YOUR_USER_ID_HERE") {
-        grid.innerHTML = `<h3 style="color:red">⚠️ Missing User ID</h3><p>Please open script.js and paste your Admin User ID.</p>`;
-        return;
+    // We will test these paths one by one until we find the courses
+    const pathsToTest = [
+        "/courses",              // Most common standard
+        "/programs",             // Wise often calls courses "Programs"
+        "/course/list",          // Older version
+        "/program/list",         // Older version
+        "/institute/courses",    // Institute specific
+        "/user/enrolled-courses" // Student specific
+    ];
+
+    let foundData = null;
+
+    for (const path of pathsToTest) {
+        const url = `${API_CONFIG.proxy}${API_CONFIG.baseUrl}${path}`;
+        console.log(`Testing: ${path} ...`);
+
+        try {
+            const response = await fetch(url, { method: "GET", headers: getHeaders() });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log(`✅ FOUND IT! Path is: ${path}`, data);
+                
+                // Check if it actually has a list of items
+                const list = data.courses || data.programs || data.data || data;
+                if (Array.isArray(list)) {
+                    foundData = list;
+                    grid.innerHTML = `<p style="color:green">✅ Connected to <b>${path}</b></p>`;
+                    break; // Stop scanning, we found it!
+                }
+            } else {
+                console.log(`❌ ${path}: ${response.status}`);
+            }
+        } catch (e) {
+            console.log(`❌ Network Error on ${path}`);
+        }
     }
 
-    const fullUrl = `${API_CONFIG.proxy}${API_CONFIG.baseUrl}/course/list`;
-    console.log("Fetching URL:", fullUrl);
-
-    try {
-        const response = await fetch(fullUrl, {
-            method: "GET",
-            headers: getHeaders()
+    // RENDER RESULTS
+    if (foundData) {
+        grid.innerHTML = "";
+        foundData.forEach(item => {
+            const img = item.thumbnail || "https://via.placeholder.com/300x160?text=Course";
+            grid.innerHTML += `
+                <div class="course-card">
+                    <img src="${img}" class="course-img">
+                    <div class="card-body">
+                        <h3>${item.name || item.title}</h3>
+                        <p>ID: ${item.id}</p>
+                    </div>
+                </div>`;
         });
-
-        const text = await response.text();
-        
-        if (!response.ok) {
-            // If it still says 401, the UserID or Key is wrong
-            throw new Error(`Server Status ${response.status}: ${text}`);
-        }
-
-        const data = JSON.parse(text);
-        console.log("✅ API Success:", data);
-
-        // Render Courses
-        if (data.courses && data.courses.length > 0) {
-            grid.innerHTML = ""; 
-            data.courses.forEach(course => {
-                const img = course.thumbnail || "https://via.placeholder.com/300x160?text=Course";
-                grid.innerHTML += `
-                    <div class="course-card">
-                        <img src="${img}" class="course-img">
-                        <div class="card-body">
-                            <h3>${course.name}</h3>
-                            <button class="enroll-btn">View</button>
-                        </div>
-                    </div>`;
-            });
-        } else {
-            grid.innerHTML = `<h3>✅ Connected!</h3><p>No courses found. Create one in Wise Dashboard.</p>`;
-        }
-
-    } catch (error) {
-        console.error(error);
+    } else {
         grid.innerHTML = `
-            <div style="color: red; border: 1px solid red; padding: 10px;">
-                <h3>Connection Failed</h3>
-                <p>${error.message}</p>
+            <div style="border: 2px solid red; padding: 15px; color: red;">
+                <h3>❌ Scan Failed</h3>
+                <p>Tried 6 different paths and none returned a course list.</p>
+                <p><strong>Action:</strong> Open the Postman link you sent, click "Courses", and copy the exact path (e.g., /v1/something).</p>
             </div>`;
     }
 }
 
-// Initialize
 window.onload = loadCourses;
