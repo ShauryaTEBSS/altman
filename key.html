@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MTH0005 Full Answer Key</title>
+    <title>MTH0005 Detailed Explanations</title>
     <style>
         :root {
             --primary-color: #003366;
             --accent-color: #d9534f;
             --highlight-bg: #e8f0fe;
+            --explanation-bg: #f8f9fa;
             --border-color: #dee2e6;
         }
 
@@ -22,7 +23,7 @@
             background-color: #f9f9f9;
         }
 
-        /* --- LOGIN OVERLAY STYLES --- */
+        /* --- LOGIN OVERLAY --- */
         #loginOverlay {
             position: fixed;
             top: 0;
@@ -40,23 +41,18 @@
             background: white;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             text-align: center;
-            border: 2px solid var(--primary-color);
+            border-top: 5px solid var(--primary-color);
             max-width: 400px;
-            width: 100%;
-        }
-
-        .login-box h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
+            width: 90%;
         }
 
         .login-box input {
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             width: 80%;
-            margin-bottom: 20px;
+            margin: 20px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -65,24 +61,17 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
         }
 
-        .login-box button:hover {
-            background-color: #004080;
-        }
+        .login-box button:hover { background-color: #004080; }
+        #errorMessage { color: red; margin-top: 10px; display: none; }
 
-        #errorMessage {
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
-
-        /* --- CONTENT STYLES (Initially Hidden) --- */
+        /* --- CONTENT STYLES --- */
         #mainContent {
             filter: blur(5px);
             pointer-events: none;
@@ -101,28 +90,16 @@
             margin-bottom: 30px;
         }
 
-        h1 {
-            color: var(--primary-color);
-            margin: 0;
-            font-size: 2em;
-        }
+        h1 { color: var(--primary-color); margin: 0; font-size: 2em; }
 
-        .exam-meta {
-            font-weight: bold;
-            color: #666;
-            margin-top: 10px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
+        /* Section Styling */
         section {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
             border: 1px solid var(--border-color);
+            overflow: hidden;
         }
 
         .section-header {
@@ -137,39 +114,43 @@
             align-items: center;
         }
 
-        .section-header:hover {
-            background-color: #004080;
-        }
+        .section-content { padding: 25px; display: none; }
 
-        .section-content {
-            padding: 20px;
-            display: none;
-        }
-
+        /* Explanation Box Styling */
         .q-block {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             border-bottom: 1px dashed #ccc;
-            padding-bottom: 15px;
+            padding-bottom: 20px;
         }
-
-        .q-block:last-child {
-            border-bottom: none;
-        }
+        .q-block:last-child { border-bottom: none; }
 
         .q-title {
             font-weight: bold;
             color: var(--primary-color);
+            font-size: 1.1em;
             margin-bottom: 10px;
             display: block;
         }
 
+        .explanation {
+            background-color: var(--explanation-bg);
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+        
+        .explanation h4 { margin-top: 0; color: #28a745; font-size: 0.9em; text-transform: uppercase; }
+
         .math-step {
-            background-color: var(--highlight-bg);
-            padding: 8px 12px;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
             border-radius: 4px;
             font-family: 'Courier New', Courier, monospace;
-            margin: 5px 0;
             display: inline-block;
+            margin: 2px 0;
+            font-weight: bold;
         }
 
         /* Fraction CSS */
@@ -181,50 +162,22 @@
             text-align: center;
             font-size: 0.9em;
         }
-        .frac > span {
-            display: block;
-            padding: 0.1em;
-        }
-        .frac span.bottom {
-            border-top: thin solid black;
-        }
-        .frac span.symbol {
-            display: none;
-        }
-        .mixed {
-            margin-right: 4px;
-            font-size: 1.1em;
-        }
+        .frac > span { display: block; padding: 0.1em; }
+        .frac span.bottom { border-top: thin solid black; }
+        .frac span.symbol { display: none; }
+        .mixed { margin-right: 4px; font-size: 1.1em; }
 
+        /* Trap Alert */
         .trap-alert {
-            border-left: 4px solid var(--accent-color);
             background-color: #fff5f5;
-            padding: 10px;
+            border: 2px solid var(--accent-color);
+            color: #a00;
+            padding: 15px;
+            border-radius: 8px;
             margin-top: 10px;
-            font-style: italic;
         }
 
-        .final-ans {
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        /* List Styles for Roman Numerals */
-        .roman-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            padding: 0;
-            list-style: none;
-        }
-        .roman-list li {
-            background: #f4f4f4;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.95em;
-        }
-
-        .section-header .arrow::after { content: '\25BC'; font-size: 0.8em; }
+        .arrow::after { content: '\25BC'; font-size: 0.8em; }
         .section-header.active .arrow::after { content: '\25B2'; }
 
     </style>
@@ -233,232 +186,263 @@
 
 <div id="loginOverlay">
     <div class="login-box">
-        <h2>🔒 Student Access</h2>
-        <p>Enter Roll Number to view the Full Answer Key</p>
-        <input type="text" id="rollNumberInput" placeholder="Enter Roll No (e.g., 22491523)">
+        <h2>🔐 Answer Key Access</h2>
+        <p>Please enter your authorized Roll Number.</p>
+        <input type="text" id="rollNumberInput" placeholder="Roll No (e.g., 22491523)">
         <br>
-        <button onclick="verifyLogin()">View Answers</button>
-        <p id="errorMessage">Invalid Roll Number. Please try again.</p>
+        <button onclick="verifyLogin()">Unlock Explanations</button>
+        <p id="errorMessage">⚠️ Access Denied. Invalid Roll Number.</p>
     </div>
 </div>
 
 <div id="mainContent">
 
     <header>
-        <h1>ANSWER KEY: MTH0005-29-DEC25</h1>
-        <div class="exam-meta">
-            <span>Class: V</span>
-            <span>Max Marks: 170</span>
-            <span>Difficulty: Olympiad Level</span>
+        <h1>ANSWER KEY & EXPLANATIONS</h1>
+        <div style="text-align:center; color:#666; margin-top:10px;">
+            <strong>Exam:</strong> MTH0005-29-DEC25 | <strong>Class:</strong> V | <strong>Max Marks:</strong> 170
         </div>
     </header>
 
     <section>
         <div class="section-header" onclick="toggleSection(this)">
-            SECTION A: ROMAN NUMERALS (50 Marks) <span class="arrow"></span>
+            SECTION A: ROMAN NUMERALS (Brief Overview) <span class="arrow"></span>
         </div>
         <div class="section-content">
+            <p><em>(Refer to standard conversion chart for full list)</em></p>
+            <ul>
+                <li>359 → CCCLIX</li>
+                <li>999 → CMXCIX</li>
+                <li>XCVIIL → <strong>Invalid</strong> (L cannot be subtracted)</li>
+                <li>CCVIIIX → <strong>Invalid</strong> (IIX is wrong)</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header" onclick="toggleSection(this)">
+            SECTION B: LARGE NUMBERS (Brief Overview) <span class="arrow"></span>
+        </div>
+        <div class="section-content">
+            <ul>
+                <li><strong>Population Sum:</strong> 4,09,55,699</li>
+                <li><strong>Wheat Total:</strong> 5,05,58,300 kg</li>
+                <li><strong>Highway Remaining:</strong> ₹ 24,39,89,500</li>
+                <li><strong>Tricky Division Chain:</strong> Final Answer 1,010,998,989</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header" onclick="toggleSection(this)">
+            SECTION C: FRACTIONS (Detailed Explanation) <span class="arrow"></span>
+        </div>
+        <div class="section-content">
+            
             <div class="q-block">
-                <span class="q-title">Que 1: Roman Numeral Conversions</span>
-                <p><em>Method: Decompose into 100s, 10s, 1s before converting.</em></p>
-                <ul class="roman-list">
-                    <li>359: 300+50+9 = <strong>CCCLIX</strong></li>
-                    <li>145: 100+40+5 = <strong>CXLV</strong></li>
-                    <li>700: <strong>DCC</strong></li>
-                    <li>500: <strong>D</strong></li>
-                    <li>600: <strong>DC</strong></li>
-                    <li>800: <strong>DCCC</strong></li>
-                    <li>900: <strong>CM</strong></li>
-                    <li>300: <strong>CCC</strong></li>
-                    <li>549: 500+40+9 = <strong>DXLIX</strong></li>
-                    <li>396: 300+90+6 = <strong>CCCXCVI</strong></li>
-                    <li>441: 400+40+1 = <strong>CDXLI</strong></li>
-                    <li>798: 700+90+8 = <strong>DCCXCVIII</strong></li>
-                    <li>483: 400+80+3 = <strong>CDLXXXIII</strong></li>
-                    <li>999: 900+90+9 = <strong>CMXCIX</strong></li>
-                    <li>666: <strong>DCLXVI</strong></li>
-                    <li>147: <strong>CXLVII</strong></li>
-                    <li>169: <strong>CLXIX</strong></li>
-                    <li>883: <strong>DCCCLXXXIII</strong></li>
-                    <li>296: <strong>CCXCVI</strong></li>
-                    <li>514: <strong>DXIV</strong></li>
-                    <li>68: <strong>LXVIII</strong></li>
-                    <li>399: <strong>CCCXCIX</strong></li>
-                    <li>100: <strong>C</strong></li>
-                    <li>454: <strong>CDLIV</strong></li>
-                    <li>261: <strong>CCLXI</strong></li>
-                    <li>388: <strong>CCCLXXXVIII</strong></li>
-                    <li>481: <strong>CDLXXXI</strong></li>
-                    <li>724: <strong>DCCXXIV</strong></li>
-                    <li>354: <strong>CCCLIV</strong></li>
-                    <li>1024: 1000+20+4 = <strong>MXXIV</strong></li>
-                </ul>
+                <span class="q-title">Q5-A: Conversions</span>
+                <div class="explanation">
+                    <h4>How to solve:</h4>
+                    <p><strong>1. Mixed to Improper (<span class="mixed">7</span><div class="frac"><span>4</span><span class="symbol">/</span><span class="bottom">9</span></div>):</strong><br>
+                    Imagine you have 7 whole pizzas cut into 9 slices each. That's <span class="math-step">7 × 9 = 63</span> slices. Add the 4 extra slices: <span class="math-step">63 + 4 = 67</span>.<br>
+                    Answer: <div class="frac"><span>67</span><span class="symbol">/</span><span class="bottom">9</span></div></p>
+
+                    <p><strong>2. Equivalent Fraction of 5/8 (Num 35):</strong><br>
+                    Ask yourself: "How did 5 become 35?" We multiplied by 7. We must treat the denominator the same way.<br>
+                    <span class="math-step">8 × 7 = 56</span>.<br>
+                    Answer: <div class="frac"><span>35</span><span class="symbol">/</span><span class="bottom">56</span></div></p>
+                </div>
             </div>
 
             <div class="q-block">
-                <span class="q-title">Que 2: Validity Check (Hindu-Arabic)</span>
-                <p><em>Note: Invalid numerals violate standard rules like subtraction limits or repetition.</em></p>
-                <ul class="roman-list">
-                    <li>XCVIIL: <span style="color:red">INVALID</span> ('L' cannot be subtracted/placed after smaller)</li>
-                    <li>CCVIIIX: <span style="color:red">INVALID</span> (IIX is wrong; 8 is VIII)</li>
-                    <li>XCVII: 90+7 = <strong>97</strong></li>
-                    <li>XCVXI: <span style="color:red">INVALID</span> (Syntax Error)</li>
-                    <li>LXXXV: 80+5 = <strong>85</strong></li>
-                    <li>XXV: <strong>25</strong></li>
-                    <li>XIVI: <span style="color:red">INVALID</span> (Should be XV or XVI)</li>
-                    <li>MXVI: 1000+10+6 = <strong>1016</strong></li>
-                    <li>CLI: 150+1 = <strong>151</strong></li>
-                    <li>XLVIIII: <span style="color:red">INVALID</span> (Symbol cannot repeat 4 times)</li>
-                    <li>XCVXIIX: <span style="color:red">INVALID</span> (Nonsense syntax)</li>
-                    <li>XXXVIII: <strong>38</strong></li>
-                    <li>DXIII: 500+13 = <strong>513</strong></li>
-                    <li>LXXXVIII: <strong>88</strong></li>
-                    <li>XLVI: 40+6 = <strong>46</strong></li>
-                    <li>CVXII: <span style="color:red">INVALID</span> (Format error; 117 is CXVII)</li>
-                    <li>CXIV: 100+14 = <strong>114</strong></li>
-                    <li>CCCXIX: 300+19 = <strong>319</strong></li>
-                    <li>CCCXXXV: <strong>335</strong></li>
-                    <li>XLV: <strong>45</strong></li>
-                </ul>
+                <span class="q-title">Q5-B: Operations</span>
+                <div class="explanation">
+                    <h4>Step-by-Step:</h4>
+                    <p><strong>Subtracting Whole & Fraction (5 - <span class="mixed">2</span><div class="frac"><span>3</span><span class="symbol">/</span><span class="bottom">8</span></div>):</strong><br>
+                    You cannot take 3/8 away from nothing. We need to borrow.<br>
+                    Change 5 into <span class="math-step">4 + 1</span> (which is <span class="math-step">4 + 8/8</span>).<br>
+                    Now: <span class="mixed">4</span><div class="frac"><span>8</span><span class="symbol">/</span><span class="bottom">8</span></div> - <span class="mixed">2</span><div class="frac"><span>3</span><span class="symbol">/</span><span class="bottom">8</span></div>.<br>
+                    4 - 2 = 2. And 8/8 - 3/8 = 5/8.<br>
+                    Answer: <span class="mixed">2</span><div class="frac"><span>5</span><span class="symbol">/</span><span class="bottom">8</span></div></p>
+                    
+                    <p><strong>Simplifying (<div class="frac"><span>14</span><span class="symbol">/</span><span class="bottom">25</span></div> × <div class="frac"><span>35</span><span class="symbol">/</span><span class="bottom">196</span></div>):</strong><br>
+                    Don't multiply big numbers! Cross-cancel first.<br>
+                    1. Divide 25 and 35 by 5 → You get 5 and 7.<br>
+                    2. Divide 14 and 196. (Hint: 14 × 14 = 196). So 14 becomes 1, 196 becomes 14.<br>
+                    3. Now you have <div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">5</span></div> × <div class="frac"><span>7</span><span class="symbol">/</span><span class="bottom">14</span></div>.<br>
+                    4. Simplify 7/14 to 1/2.<br>
+                    Final: <div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">5</span></div> × <div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">2</span></div> = <div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">10</span></div></p>
+                </div>
+            </div>
+
+            <div class="q-block">
+                <span class="q-title">The "Water Tank" Logic (Tricky!)</span>
+                <div class="trap-alert">
+                    <strong>Problem:</strong> 240L left. 1/3 evaporated, 1/4 cleaned, 1/5 leaked. What was total?
+                </div>
+                <div class="explanation">
+                    <h4>Reverse Method (Working Backwards):</h4>
+                    <p>Think of it like rewinding a movie.</p>
+                    <ol>
+                        <li><strong>The End (Evaporation):</strong> We have 240L left. The problem says 1/3 evaporated. That means <strong>2/3 was left</strong>.
+                            <br>If 2 parts = 240L, then 1 part = 120L.
+                            <br>So before evaporation (3 parts) = <span class="math-step">360 Litres</span>.
+                        </li>
+                        <li><strong>The Middle (Cleaning):</strong> We have 360L. The problem says 1/4 was used. That means <strong>3/4 was left</strong>.
+                            <br>If 3 parts = 360L, then 1 part = 120L.
+                            <br>So before cleaning (4 parts) = <span class="math-step">480 Litres</span>.
+                        </li>
+                        <li><strong>The Start (Leakage):</strong> We have 480L. The problem says 1/5 leaked. That means <strong>4/5 was left</strong>.
+                            <br>If 4 parts = 480L, then 1 part = 120L.
+                            <br>So full tank (5 parts) = <span class="math-step">600 Litres</span>.
+                        </li>
+                    </ol>
+                    <p><strong>Final Answer: 600 Litres</strong></p>
+                </div>
+            </div>
+
+            <div class="q-block">
+                <span class="q-title">Complex BODMAS Fraction</span>
+                <div class="explanation">
+                    <p>Expression: <span class="mixed">7</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">2</span></div> - [ <span class="mixed">2</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">4</span></div> ÷ { <span class="mixed">1</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">4</span></div> - <div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">2</span></div> × ( <span class="mixed">1</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">2</span></div> - <div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">3</span></div> ) } ]</p>
+                    <ul>
+                        <li><strong>Step 1 (Inner Round Bracket):</strong> (3/2 - 1/3). LCM is 6. (9/6 - 2/6) = <strong>7/6</strong>.</li>
+                        <li><strong>Step 2 (Multiply):</strong> 1/2 × 7/6 = <strong>7/12</strong>.</li>
+                        <li><strong>Step 3 (Curly Bracket):</strong> 1 1/4 - 7/12. Change 1 1/4 to 5/4 (which is 15/12).<br>15/12 - 7/12 = 8/12 = <strong>2/3</strong>.</li>
+                        <li><strong>Step 4 (Divide):</strong> 2 1/4 ÷ 2/3. Change 2 1/4 to 9/4.<br>9/4 ÷ 2/3 becomes 9/4 × 3/2 = <strong>27/8</strong>.</li>
+                        <li><strong>Step 5 (Final Subtract):</strong> 7 1/2 - 27/8. Change 7 1/2 to 15/2 (which is 60/8).<br>60/8 - 27/8 = 33/8 = <strong>4 1/8</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header" onclick="toggleSection(this)">
+            SECTION D: DECIMALS (Detailed Explanation) <span class="arrow"></span>
+        </div>
+        <div class="section-content">
+            <div class="q-block">
+                <span class="q-title">Operations & Concepts</span>
+                <div class="explanation">
+                    <p><strong>Comparing 6.1 vs 6.099:</strong><br>
+                    Add zeros to make them the same length: 6.100 vs 6.099.<br>
+                    Clearly, 100 is bigger than 099. So <strong>6.1 is greater</strong>.</p>
+                    
+                    <p><strong>Shopkeeper Problem:</strong><br>
+                    1. Total Cost: 185.50 + 240.75 = 426.25.<br>
+                    2. Correct Change: 500.00 - 426.25 = 73.75.<br>
+                    3. Shopkeeper gave: 74.25.<br>
+                    4. Did he give extra? Yes. 74.25 - 73.75 = <strong>0.50 (50 paise)</strong>.</p>
+                </div>
+            </div>
+            
+            <div class="q-block">
+                <span class="q-title">Unit Conversion Trap</span>
+                <div class="explanation">
+                    <p><strong>Oil Bottles:</strong><br>
+                    Drum = 85.5 Litres. Bottle = 750 millilitres.<br>
+                    You cannot divide Litres by Millilitres directly!<br>
+                    Step 1: Convert 750ml to Litres → 0.750 L.<br>
+                    Step 2: Divide 85.5 ÷ 0.75.<br>
+                    Move decimals 2 spots right: 8550 ÷ 75.<br>
+                    Answer: <strong>114 Bottles</strong>.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <section>
         <div class="section-header" onclick="toggleSection(this)">
-            SECTION B: LARGE NUMBERS (25 Marks) <span class="arrow"></span>
+            SECTION E: SIMPLIFICATION (Detailed Explanation) <span class="arrow"></span>
         </div>
         <div class="section-content">
             <div class="q-block">
-                <span class="q-title">Que 3: Expanded Form & Words</span>
-                <ul>
-                    <li><strong>8069451:</strong><br> Words (Intl): Eight million, sixty-nine thousand, four hundred fifty-one.<br>Expanded: 8,000,000 + 60,000 + 9,000 + 400 + 50 + 1</li>
-                    <li><strong>4445194 Difference:</strong><br> First 4 (Ten Lakhs) - Last 4 (Ones) = 40,00,000 - 4 = <span class="final-ans">39,99,996</span></li>
-                    <li><strong>18654501:</strong><br> Expanded: 1,00,00,000 + 80,00,000 + 6,00,000 + 50,000 + 4,000 + 500 + 1</li>
-                    <li><strong>92890000:</strong><br> How many Ten Lakhs? 9,28,90,000 ÷ 10,00,000 = <span class="final-ans">92.89</span> (approx 92)</li>
-                    <li><strong>900800700:</strong><br> Words (Indian): Ninety Crore, Eight Lakh, Seven Hundred.</li>
-                </ul>
-            </div>
-
-            <div class="q-block">
-                <span class="q-title">Que 4: Word Problems</span>
-                <ul>
-                    <li><strong>Population:</strong> Sum of all categories = <span class="final-ans">4,09,55,699</span></li>
-                    <li><strong>Wheat Sales:</strong> 2023 (2,45,18,900) + 2024 (2,60,39,400) = <span class="final-ans">5,05,58,300 kg</span></li>
-                    <li><strong>Highway Fund:</strong> Total Spent = 60,60,10,500. Remaining = 85,00,00,000 - Spent = <span class="final-ans">₹ 24,39,89,500</span></li>
-                    <li><strong>Factory (Leap Year):</strong> 366 - 65 = 301 days. 24,500 × 301 = <span class="final-ans">73,74,500 bolts</span></li>
-                    <li><strong>Division Chain:</strong><br>
-                        1. 99,999,999 ÷ 999 → Q1=100,100, R1=99<br>
-                        2. 100,100 ÷ 99 → Q2=1011<br>
-                        3. 1011 × 999,999 = <span class="final-ans">1,010,998,989</span>
-                    </li>
-                </ul>
+                <span class="q-title">BODMAS Rule Application</span>
+                <div class="explanation">
+                    <p><strong>Question: 18 + 64 ÷ 8 × 3 - 20</strong></p>
+                    <ol>
+                        <li><strong>D (Division):</strong> 64 ÷ 8 = 8. <br><em>New equation: 18 + 8 × 3 - 20</em></li>
+                        <li><strong>M (Multiplication):</strong> 8 × 3 = 24. <br><em>New equation: 18 + 24 - 20</em></li>
+                        <li><strong>A (Addition):</strong> 18 + 24 = 42.</li>
+                        <li><strong>S (Subtraction):</strong> 42 - 20 = <strong>22</strong>.</li>
+                    </ol>
+                </div>
+                
+                <div class="explanation">
+                    <p><strong>Question: 100 - [ 15 + { 8 × ( 12 - 9 ) } ]</strong></p>
+                    <ol>
+                        <li><strong>Inner Bracket ():</strong> 12 - 9 = 3.</li>
+                        <li><strong>Curly Bracket {}:</strong> 8 × 3 = 24.</li>
+                        <li><strong>Square Bracket []:</strong> 15 + 24 = 39.</li>
+                        <li><strong>Final:</strong> 100 - 39 = <strong>61</strong>.</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </section>
 
     <section>
         <div class="section-header" onclick="toggleSection(this)">
-            SECTION C: FRACTIONS (30 Marks) <span class="arrow"></span>
+            SECTION F: MENTAL MANIA (Logic Traps) <span class="arrow"></span>
         </div>
         <div class="section-content">
+            
             <div class="q-block">
-                <span class="q-title">Que 5: Calculations (Part A & B)</span>
-                <ul>
-                    <li><span class="mixed">7</span><div class="frac"><span>4</span><span class="symbol">/</span><span class="bottom">9</span></div> to Improper = <div class="frac"><span>67</span><span class="symbol">/</span><span class="bottom">9</span></div></li>
-                    <li><div class="frac"><span>652</span><span class="symbol">/</span><span class="bottom">8</span></div> to Mixed = <span class="mixed">81</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">2</span></div></li>
-                    <li>Equivalent of 5/8 with Num 35 = <div class="frac"><span>35</span><span class="symbol">/</span><span class="bottom">56</span></div></li>
-                    <li><strong>Descending:</strong> 5/4 > 2/3 > 7/12 > 1/7</li>
-                    <li><strong>Add:</strong> 3.25 + 2.83 + 0.5 + 0.35 = <span class="final-ans">6.93</span></li>
-                    <li><strong>Subtract:</strong> 5 - <span class="mixed">2</span><div class="frac"><span>3</span><span class="symbol">/</span><span class="bottom">8</span></div> = <span class="mixed">2</span><div class="frac"><span>5</span><span class="symbol">/</span><span class="bottom">8</span></div></li>
-                    <li><strong>Simplify:</strong> <div class="frac"><span>14</span><span class="symbol">/</span><span class="bottom">25</span></div> × <div class="frac"><span>35</span><span class="symbol">/</span><span class="bottom">196</span></div> = <div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">10</span></div></li>
-                </ul>
+                <span class="q-title">1. The Train Trap</span>
+                <div class="trap-alert">
+                    "Multiply that entire result by the <strong>smallest one-digit whole number</strong>."
+                </div>
+                <div class="explanation">
+                    <p>It doesn't matter how many passengers or coins there are. The calculation chain ends with a multiplication.<br>
+                    The smallest one-digit whole number is <strong>0</strong>.<br>
+                    Math Rule: <span class="math-step">Anything × 0 = 0</span>.<br>
+                    Don't waste time calculating the passengers!</p>
+                </div>
             </div>
 
             <div class="q-block">
-                <span class="q-title">Que 5: Word Problems (Part C)</span>
-                <ul>
-                    <li><strong>Park:</strong> Area = 320 m²; Perimeter = 76.2 m</li>
-                    <li><strong>Bucket:</strong> <span class="mixed">15</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">4</span></div> ÷ <span class="mixed">1</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">2</span></div> = <span class="mixed">10</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">6</span></div> (10 full jugs)</li>
-                    <li><strong>Wire:</strong> 121.5 - 5.75 = <span class="final-ans">115.75 m</span></li>
-                    <li><strong>Vegetables:</strong> Sum = <span class="mixed">6</span><div class="frac"><span>23</span><span class="symbol">/</span><span class="bottom">24</span></div> kg</li>
-                    <li><strong>Fencing:</strong> 76.2 m × 10 = <span class="final-ans">₹ 762</span></li>
-                    <li><strong>Complex BODMAS:</strong> Final Answer = <span class="mixed">4</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">8</span></div></li>
-                    <li><strong>Water Tank (Logic):</strong> 240 × (5/2) = <span class="final-ans">600 Litres</span></li>
-                </ul>
+                <span class="q-title">2. Divide by Half?</span>
+                <div class="explanation">
+                    <p><strong>Question:</strong> "Divide 40 by half."<br>
+                    Most students do 40 ÷ 2 = 20. <strong>Wrong!</strong><br>
+                    "Half" as a number is 0.5 or 1/2.<br>
+                    <span class="math-step">40 ÷ 0.5 = 80</span>.<br>
+                    (Think: How many half-cookies fit in 40 cookies? 80 halves).<br>
+                    Then add 12 (gross dozen) = 92.<br>
+                    Subtract 28 (Feb days) = <strong>64</strong>.</p>
+                </div>
             </div>
-        </div>
-    </section>
 
-    <section>
-        <div class="section-header" onclick="toggleSection(this)">
-            SECTION D: DECIMALS (25 Marks) <span class="arrow"></span>
-        </div>
-        <div class="section-content">
             <div class="q-block">
-                <span class="q-title">Que 6: Concepts & Operations</span>
-                <ul>
-                    <li>Ninety-two and seven-hundredths = <strong>92.07</strong></li>
-                    <li>Place value of 7 in 415.079 = <strong>Hundredths</strong></li>
-                    <li>0.064 as fraction = <div class="frac"><span>8</span><span class="symbol">/</span><span class="bottom">125</span></div></li>
-                    <li>Expanded Decimal = <strong>530.209</strong></li>
-                    <li>Comparison: 6.1 > 6.099</li>
-                    <li><strong>Add:</strong> 149.356</li>
-                    <li><strong>Subtract:</strong> 317.35</li>
-                    <li><strong>Multiply:</strong> 14.25 × 2.8 = 39.9</li>
-                    <li><strong>Divide:</strong> 16.9 ÷ 1.3 = 13</li>
-                </ul>
+                <span class="q-title">5. Pizza "Remaining" Logic</span>
+                <div class="explanation">
+                    <p>Start: 16 Slices.<br>
+                    1. Rohan eats 4. <span class="math-step">16 - 4 = 12 left</span>.<br>
+                    2. Sister eats <strong>half of remaining</strong>. Half of 12 is 6. So she eats 6. <span class="math-step">12 - 6 = 6 left</span>.<br>
+                    3. Dog eats <strong>1/4 of what was left</strong>. What is 1/4 of 6?<br>
+                    <span class="math-step">6 ÷ 4 = 1.5 slices</span>.<br>
+                    4. Final Remaining: <span class="math-step">6 - 1.5 = 4.5 slices</span>.</p>
+                </div>
             </div>
-            <div class="q-block">
-                <span class="q-title">Que 6: Word Problems</span>
-                <ul>
-                    <li><strong>Oil Bottles:</strong> 85.5 ÷ 0.75 = <span class="final-ans">114 bottles</span></li>
-                    <li><strong>Shopkeeper:</strong> Returned 74.25 but should have returned 73.75. Difference = <span class="final-ans">₹ 0.50 (Extra)</span></li>
-                    <li><strong>Square Area:</strong> Side = 25m + 0.025m = 25.025m. Area ≈ <span class="final-ans">626.25 m²</span></li>
-                    <li><strong>Bamboo:</strong> 12 - (3.45+5.25) = <span class="final-ans">3.3 m</span></li>
-                </ul>
-            </div>
-        </div>
-    </section>
 
-    <section>
-        <div class="section-header" onclick="toggleSection(this)">
-            SECTION E: SIMPLIFICATION (20 Marks) <span class="arrow"></span>
-        </div>
-        <div class="section-content">
             <div class="q-block">
-                <span class="q-title">Que 7: BODMAS</span>
-                <ul>
-                    <li>18 + 64÷8 × 3 - 20 = 18 + 24 - 20 = <span class="final-ans">22</span></li>
-                    <li>100 - [15 + {8 × 3}] = 100 - 39 = <span class="final-ans">61</span></li>
-                    <li><span class="mixed">5</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">2</span></div> of (...) - 1 = <span class="mixed">5</span><div class="frac"><span>1</span><span class="symbol">/</span><span class="bottom">9</span></div></li>
-                    <li>1.5×0.4 + 3.6÷0.9 - 2.6÷9 = <span class="final-ans">4.31</span></li>
-                    <li>16 - {5 + 2 - (6/17 × 4)} = <span class="final-ans">10.41</span></li>
-                </ul>
+                <span class="q-title">10. The Clock Beeps</span>
+                <div class="explanation">
+                    <p>Time period: 12:00 PM (Noon) to 5:00 PM.<br>
+                    Does the clock beep 12 times or 0 times at noon? It beeps 12.<br>
+                    Count them up:<br>
+                    12:00 → 12<br>
+                    1:00 → 1<br>
+                    2:00 → 2<br>
+                    3:00 → 3<br>
+                    4:00 → 4<br>
+                    5:00 → 5<br>
+                    Total: <span class="math-step">12+1+2+3+4+5 = 27</span>.</p>
+                </div>
             </div>
-        </div>
-    </section>
 
-    <section>
-        <div class="section-header" onclick="toggleSection(this)">
-            SECTION F: MENTAL MANIA (20 Marks) <span class="arrow"></span>
-        </div>
-        <div class="section-content">
-            <div class="q-block">
-                <span class="q-title">Logic Checks (The "Hatkar" Section)</span>
-                <ul>
-                    <li><strong>Train Trap:</strong> Multiplied by smallest whole number (0). Answer = <span class="final-ans">0</span></li>
-                    <li><strong>Lucky Number:</strong> (40 ÷ 0.5) + 12 - 28 = 80 + 12 - 28 = <span class="final-ans">64</span></li>
-                    <li><strong>Successor Loop:</strong> (100,001 - 100,000) × 7 zeros = <span class="final-ans">7</span></li>
-                    <li><strong>Roman Architect:</strong> MCMXCIX + I = MM (2000). <strong>Correct</strong></li>
-                    <li><strong>Pizza Party:</strong> Remaining after sister = 6. Dog eats 1/4 of 6 (1.5). Left = <span class="final-ans">4.5 slices</span></li>
-                    <li><strong>Decimal Detective:</strong> <span class="final-ans">9.242</span></li>
-                    <li><strong>Simplification Marathon:</strong> Chain involves "Multiply by 0". Answer = <span class="final-ans">0</span></li>
-                    <li><strong>Rope Logic:</strong> 50m - 45m = <span class="final-ans">5 meters</span></li>
-                    <li><strong>Counting Nines:</strong> Units (10) + Tens (10) = <span class="final-ans">20 times</span></li>
-                    <li><strong>Clock Beeps:</strong> 12+1+2+3+4+5 = <span class="final-ans">27 beeps</span></li>
-                </ul>
-            </div>
         </div>
     </section>
 
@@ -471,6 +455,7 @@
         var body = document.body;
         var errorMsg = document.getElementById('errorMessage');
 
+        // Valid Roll Numbers
         var validRolls = ["22491523", "22586941"];
 
         if (validRolls.includes(input)) {
