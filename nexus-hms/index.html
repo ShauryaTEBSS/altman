@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon</title>
+    <style>
+        /* --- CSS Variables --- */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --accent-color: #007AFF;
+            --input-bg: #ffffff;
+            --input-border: #dee2e6;
+        }
+
+        /* --- Dark Mode Override --- */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --accent-color: #0A84FF;
+                --input-bg: #1e1e1e;
+                --input-border: #333333;
+            }
+        }
+
+        /* --- Reset & Layout --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* --- Typography --- */
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, var(--accent-color), #8e44ad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            opacity: 0.8;
+        }
+
+        /* --- Form Styling --- */
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        input[type="email"] {
+            flex: 1;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="email"]:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            padding: 14px 24px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        button:hover { opacity: 0.9; }
+        button:active { transform: scale(0.98); }
+
+        /* --- Success Message (Hidden by default) --- */
+        .success-message {
+            display: none;
+            color: #28a745;
+            font-weight: 500;
+            margin-top: -1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Footer --- */
+        footer {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Coming Soon</h1>
+        <p>We are building something amazing. <br>Subscribe to be notified when we launch.</p>
+
+        <form class="newsletter-form" id="notifyForm">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button type="submit">Notify Me</button>
+        </form>
+
+        <div class="success-message" id="successMsg">
+            Thanks! We'll be in touch.
+        </div>
+
+        <footer>
+            &copy; 2026 Nexus HMS Powered by Altman InfoComm
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('notifyForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop page reload
+            
+            // UI Logic for "Fake" Submission
+            const form = this;
+            const btn = form.querySelector('button');
+            const originalText = btn.innerText;
+
+            btn.innerText = 'Sending...';
+            btn.disabled = true;
+
+            // Simulate network request (1 second delay)
+            setTimeout(() => {
+                form.style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+                
+                // Here you would normally send data to your backend/Firebase
+                console.log("Email captured:", document.getElementById('email').value);
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>
